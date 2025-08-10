@@ -1,0 +1,106 @@
+pipeline {
+    agent any
+    tools {
+        jdk 'jdk17'
+        nodejs 'node24'
+    }
+    environment {
+        SCANNER_HOME = tool 'sonar-scanner'
+    }
+    stages {
+        stage("Clean Workspace") {
+            steps {
+                cleanWs()
+            }
+        }
+
+        stage("Git Checkout") {
+            steps {
+                git branch: 'master', url: 'https://github.com/KastroVKiran/Zomato-Project-Kastro.git'
+            }
+        }
+
+        stage("SonarQube Analysis") {
+            steps {
+                withSonarQubeEnv('sonar-server') {
+                    sh '''$SCANNER_HOME/bin/sonar-scanner \
+                        -Dsonar.projectName=zomato \
+                        -Dsonar.projectKey=zomato'''
+                }
+            }
+        }
+
+        stage("Install Dependencies") {
+            steps {
+                sh """
+                npm install
+                npm audit fix || true
+                """
+            }
+        }
+
+        stage("OWASP Dependency Check") {
+            steps {
+                catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
+                    dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit', 
+                        odcInstallation: 'DP-Check'
+                    dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
+                }
+            }
+        }
+
+        stage("Trivy Security Scan") {
+            steps {
+                sh 'trivy fs --security-checks vuln . > trivy.txt || true'
+            }
+        }
+
+        stage("Build Docker Image") {
+            steps {
+                sh 'docker build -t zomato .'
+            }
+        }
+
+        stage("Push to DockerHub") {
+            steps {
+                script {
+                    withDockerRegistry(credentialsId: 'docker') {
+                        sh 'docker tag zomato mahi320/zomato:latest'
+                        sh 'docker push mahi320/zomato:latest'
+                    }
+                }
+            }
+        }
+
+        stage("Deploy Container") {
+            steps {
+                script {
+                    // Remove existing container if running, then deploy on port 3001
+                    sh 'docker rm -f zomato || true'
+                    sh 'docker run -d --name zomato -p 3001:3000 mahi320/zomato:latest'
+                }
+            }
+        }
+
+        stage("Docker Scout Image") {
+            steps {
+                sh 'docker scout cves mahi320/zomato:latest || true'
+            }
+        }
+    }
+
+    post {
+        always {
+            echo "Pipeline completed with status: ${currentBuild.currentResult}"
+        }
+        success {
+            echo "Application deployed successfully! Access at: http://<your-server-ip>:3001"
+        }
+        unstable {
+            echo "Pipeline completed with warnings (OWASP scan)"
+        }
+        failure {
+            echo "Pipeline failed. Check logs for errors."
+        }
+    }
+}
