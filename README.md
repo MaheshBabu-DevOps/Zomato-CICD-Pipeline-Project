@@ -63,7 +63,7 @@ These tools handle container orchestration, monitoring, and visualization.
 ![Kubernetes](./K8S.png)
 ![Grafana](./Grafana.png)
 ![Grafana](./Kubelet.png)
-![Kubernetes](./K8s-API.png)
+![K8s](./K8s-API.png)
 ![k8s](./Screenshot from 2025-08-11 16-09-04.png)
 ![Prometheus](./Prometheus.png)
 
