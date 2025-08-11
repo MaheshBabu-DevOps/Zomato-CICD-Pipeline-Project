@@ -70,14 +70,6 @@ These tools handle container orchestration, monitoring, and visualization.
 
 ---
 
-### 📹 DevOps Project Videos Link:
-
-[![Docker CI/CD Demo](./Docker-cicd-thumbnail.png)](./Docker-cicd.webm)
-
-[![Kubernetes Demo](./K8S.png)](./K8s.webm)
-
----
-
 ## Connect with me
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=flat-square&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/kastro-kiran/)  
