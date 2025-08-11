@@ -1,28 +1,28 @@
 pipeline {
     agent any
     tools {
-        jdk 'jdk17'
-        nodejs 'node24'
+        jdk 'jdk17'          // Use JDK 17
+        nodejs 'node24'      // Use Node.js 24
     }
     environment {
-        SCANNER_HOME = tool 'sonar-scanner'
+        SCANNER_HOME = tool 'sonar-scanner'   // SonarQube scanner tool path
     }
     stages {
         stage("Clean Workspace") {
             steps {
-                cleanWs()
+                cleanWs()       // Clean previous workspace before starting
             }
         }
 
         stage("Git Checkout") {
             steps {
-                git branch: 'master', url: 'https://github.com/KastroVKiran/Zomato-Project-Kastro.git'
+                git branch: 'master', url: 'https://github.com/MaheshBabu-DevOps/Zomato-DevSecOps-Pipeline-Project.git'  // Checkout latest code
             }
         }
 
         stage("SonarQube Analysis") {
             steps {
-                withSonarQubeEnv('sonar-server') {
+                withSonarQubeEnv('sonar-server') {   // Run SonarQube scan
                     sh '''$SCANNER_HOME/bin/sonar-scanner \
                         -Dsonar.projectName=zomato \
                         -Dsonar.projectKey=zomato'''
@@ -33,40 +33,40 @@ pipeline {
         stage("Install Dependencies") {
             steps {
                 sh """
-                npm install
-                npm audit fix || true
+                npm install          // Install npm dependencies
+                npm audit fix || true  // Fix vulnerabilities if any, but don't fail build
                 """
             }
         }
 
         stage("OWASP Dependency Check") {
             steps {
-                catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
+                catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {   // Run OWASP Dependency Check; mark unstable on warnings
                     dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit', 
                         odcInstallation: 'DP-Check'
-                    dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
+                    dependencyCheckPublisher pattern: '**/dependency-check-report.xml'  // Publish report
                 }
             }
         }
 
         stage("Trivy Security Scan") {
             steps {
-                sh 'trivy fs --security-checks vuln . > trivy.txt || true'
+                sh 'trivy fs --security-checks vuln . > trivy.txt || true'  // Run Trivy vulnerability scan; continue even if errors
             }
         }
 
         stage("Build Docker Image") {
             steps {
-                sh 'docker build -t zomato .'
+                sh 'docker build -t zomato .'    // Build Docker image named 'zomato'
             }
         }
 
         stage("Push to DockerHub") {
             steps {
                 script {
-                    withDockerRegistry(credentialsId: 'docker') {
-                        sh 'docker tag zomato mahi320/zomato:latest'
-                        sh 'docker push mahi320/zomato:latest'
+                    withDockerRegistry(credentialsId: 'docker') {    // Login to DockerHub with stored credentials
+                        sh 'docker tag zomato mahi320/zomato:latest'    // Tag image
+                        sh 'docker push mahi320/zomato:latest'          // Push image to DockerHub
                     }
                 }
             }
@@ -75,16 +75,15 @@ pipeline {
         stage("Deploy Container") {
             steps {
                 script {
-                    // Remove existing container if running, then deploy on port 3001
-                    sh 'docker rm -f zomato || true'
-                    sh 'docker run -d --name zomato -p 3001:3000 mahi320/zomato:latest'
+                    sh 'docker rm -f zomato || true'                // Remove old container if exists
+                    sh 'docker run -d --name zomato -p 3001:3000 mahi320/zomato:latest'  // Run new container mapping ports
                 }
             }
         }
 
         stage("Docker Scout Image") {
             steps {
-                sh 'docker scout cves mahi320/zomato:latest || true'
+                sh 'docker scout cves mahi320/zomato:latest || true'   // Scan Docker image vulnerabilities with Docker Scout
             }
         }
     }
@@ -92,15 +91,28 @@ pipeline {
     post {
         always {
             echo "Pipeline completed with status: ${currentBuild.currentResult}"
+            mail to: 'maheshtemmanaboina@gmail.com',
+                 subject: "Jenkins Pipeline: Build ${currentBuild.fullDisplayName} - ${currentBuild.currentResult}",
+                 body: """\
+Hello,
+
+The Jenkins pipeline '${currentBuild.fullDisplayName}' has completed with status: ${currentBuild.currentResult}.
+
+Check console output at ${env.BUILD_URL} to see the details.
+
+Regards,
+Jenkins
+"""
         }
         success {
-            echo "Application deployed successfully! Access at: http://<your-server-ip>:3001"
+            echo "Application deployed successfully! Access at: http://<your-server-ip>:3001"  // Success message with access info
         }
         unstable {
-            echo "Pipeline completed with warnings (OWASP scan)"
+            echo "Pipeline completed with warnings (OWASP scan)"  // Unstable result warning message
         }
         failure {
-            echo "Pipeline failed. Check logs for errors."
+            echo "Pipeline failed. Check logs for errors."       // Failure message
         }
     }
 }
+
