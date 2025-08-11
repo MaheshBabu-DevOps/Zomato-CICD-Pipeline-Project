@@ -1,4 +1,4 @@
-# 🌍 DevOps Project: Food Delivery App Deployment 🍔
+# 🌍DevOps Project: Zomato Food Delivery App Deployment 🍔
 
 This DevOps project showcases the deployment of a ZOMATO Clone App leveraging modern DevOps tools and technologies.
 
