@@ -1,8 +1,11 @@
-# 🚀 **DevOps Project: ZOMATO Clone App Deployment**
+# 🌍 DevOps Project: Food Delivery App Deployment 🍔
 
 This DevOps project showcases the deployment of a ZOMATO Clone App leveraging modern DevOps tools and technologies.
 
+---
 ## 🛠️ Tools & Services Used
+
+---
 
 ### 1. Docker Deployment CI/CD-DevOPs Pipeline
 These tools are used for building, scanning, and deploying Docker containers on the Ubuntu host.
@@ -26,7 +29,7 @@ These tools handle container orchestration, monitoring, and visualization.
 3. **Grafana** ![Grafana](https://img.shields.io/badge/Grafana-F46800?style=flat-square&logo=grafana&logoColor=white) — Visualization and dashboards  
 4. **ArgoCD** ![ArgoCD](https://img.shields.io/badge/ArgoCD-EF7B4D?style=flat-square&logo=argo&logoColor=white) — GitOps continuous delivery tool
 
-
+---
 
 ### Project Stages and Server Setup
 
@@ -36,20 +39,26 @@ These tools handle container orchestration, monitoring, and visualization.
 2. **Stage 2**: - Kubernetes Deployment and Monitoring**  
    Deploy the app on a Kubernetes cluster installed on the same local Ubuntu machine, with monitoring set up using Prometheus and Grafana. This is a fully on-premise setup without any cloud services.
    
-   
+
+---   
    
 ## Architecture Diagram
 
 ![Architecture Diagram](./image.png)
+
 ![Architecture Diagram](./Zomato-App-CICD.png)
 
-## CI/CD Pipeline Screenshots
+---
+
+## DevOPs-CI/CD Pipeline 
 
 ![Pipeline ](./Jenkins-Pipeline.png)
 ![Docker-image](./Docker-Images.png)
 ![Zomato-Web-App](./Zomato-App.png)
 
-## Kubernetes and Monitoring
+---
+
+## Kubernetes(K8S) and Monitoring
 
 ![Kubernetes](./K8S.png)
 ![Grafana](./Grafana.png)
@@ -59,26 +68,26 @@ These tools handle container orchestration, monitoring, and visualization.
 ![Prometheus](./Prometheus.png)
 
 
-### 📂 GitHub Repo Link:  
-[**ZOMATO Clone DevOps Project**](git@github.com:MaheshBabu-DevOps/Zomato-DevSecOps-Pipeline-Project.git)
-
+---
 
 ### 📹 DevOps Project Video Link:  
-[![Kubernetes Demo](./k8s-thumbnail.png)](./k8s.webcam)
+[![Docker CI/CD Demo](./Docker-cicd.webm)
 
-[![Docker CI/CD Demo](./docker-cicd-thumbnail.png)](./Docker-cicd.webm)
+[![Kubernetes Demo](./k8s.webcam)
 
+---
 
 ## Connect with me
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=flat-square&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/kastro-kiran/)  
 [![GitHub](https://img.shields.io/badge/GitHub-181717?style=flat-square&logo=github&logoColor=white)](https://github.com/MaheshBabu-DevOps)
 
-
+---
 
 ## Learning made fun! 😊
 
-<img src="./e2caeb03-17db-4e6b-9610-884f540c1c5c.png" alt="Profile Image" width="120" height="120" style="border-radius:50%;" />
+<img src="./DevOPs-Engineer.png" alt="Profile Image" width="120" height="120" style="border-radius:50%;" />
+
 
 
 
