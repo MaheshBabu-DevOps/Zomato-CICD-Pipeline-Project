@@ -70,10 +70,11 @@ These tools handle container orchestration, monitoring, and visualization.
 
 ---
 
-### 📹 DevOps Project Video Link:  
-[![Docker CI/CD Demo](./Docker-cicd.webm)
+### 📹 DevOps Project Videos Link:
 
-[![Kubernetes Demo](./k8s.webcam)
+[![Docker CI/CD Demo](./Docker-cicd-thumbnail.png)](./Docker-cicd.webm)
+
+[![Kubernetes Demo](./K8S.png)](./K8s.webm)
 
 ---
 
